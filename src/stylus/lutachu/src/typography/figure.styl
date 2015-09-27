@@ -1,0 +1,39 @@
+// ===============================================
+// Typograhpy / Figure.styl                     ||
+//                                              ||
+// =============================================||
+// Copyright 2015 @ Rakume<i@fake.moe>          ||
+// MIT License                                  ||
+// ===============================================
+
+@require "../variables"
+
+figure
+  text-align: center
+
+  &.left,
+  &.right
+    width: 50%
+
+figcaption
+  font-size: 80%
+  margin-top: .5em
+
+  &::after
+    content: ""
+    width: 15%
+
+    display: block
+    margin: 1em auto .2em
+
+    color: color-dark-grey
+    border-bottom: 1px solid color-border-normal
+
+@media mq-mobile
+  figure
+    &.left,
+    &.right
+      width: 100%
+      margin: 0
+      padding: 1em 40px
+      float: none!important

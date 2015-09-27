@@ -1,0 +1,89 @@
+/**
+ * Koishumi
+ *
+ * @author Rakume Hayashi<i@fake.moe>
+ */
+
+@import "lutachu"
+
+body
+  background-color: #f5f5f5
+
+.container
+#header
+#footer
+  max-width: 50%
+
+  @media mq-mobile
+    max-width: inherit
+
+  @media mq-tablet
+    max-width: 90%
+
+@media mq-mobile
+  #main
+    padding: 0
+
+  body
+    padding: 0 10px
+
+#header
+  margin: 4em auto
+  text-align: center
+
+  .header-descripition
+    color: #999
+    text-align: center
+
+#main  
+  background-color: #fff
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .1)
+
+.content
+  padding: 1em 2em
+
+.post
+  margin-bottom: .5em
+
+  &:last-child
+    margin-bottom: 0
+
+.post-header
+  text-align: center
+  margin: 1em 0 .5em
+
+  border-bottom: 1px solid #eee
+
+.post-datetime
+  color: #999
+  font-style: italic
+
+.post-title
+  margin-top: .25em
+
+.post-link
+  color: #269
+  text-decoration: none
+
+  &:hover
+    color: #1d5884
+
+.post-date
+  float: right
+  text-align: right
+
+.content
+  p:last-child
+    margin: 0
+
+#footer
+  margin: 0 auto
+  padding: 1.5em 0
+
+  color: #999
+  font-size: .9em
+
+  p
+    margin: 0
+    text-align: center

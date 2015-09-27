@@ -1,0 +1,52 @@
+// ===============================================
+// Typograhpy / zh / Counter.styl               ||
+//                                              ||
+// =============================================||
+// Copyright 2015 @ Rakume<i@fake.moe>          ||
+// MIT License                                  ||
+// ===============================================
+
+.text-counter
+  &:lang(zh)
+    counter-reset: ch1 ch2 ch3 ch4 ch5 ch6
+
+    h1
+      counter-reset: ch2 ch3 ch4 ch5 ch6
+
+      &::before
+        content: counter(ch1) '\3000'
+        content: counter(ch1, cjk-ideographic) '、'
+        counter-increment: ch1
+
+    h2
+      counter-reset: ch3 ch4 ch5 ch6
+
+      &::before
+        content: counter(ch1) '.' counter(ch2) '\3000'
+        counter-increment: ch2
+
+    h3
+        counter-reset: ch4 ch5 ch6
+
+        &::before
+          content: counter(ch2) '.' counter(ch3) '\3000'
+          counter-increment: ch3
+
+    h4
+      counter-reset: ch5 ch6
+
+      &::before
+        content: counter(ch2) '.' counter(ch3) '.' counter(ch4) '\3000'
+        counter-increment: ch4
+
+    h5
+      counter-reset: ch6
+
+      &::before
+        content: counter(ch2) '.' counter(ch3) '.' counter(ch4) '.' counter(ch5) '\3000'
+        counter-increment: ch5
+
+    h6
+      &::before
+        content: counter(ch2) '.' counter(ch3) '.' counter(ch4) '.' counter(ch5) '.' counter(ch6) '\3000'
+        counter-increment: ch6

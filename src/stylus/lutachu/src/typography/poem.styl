@@ -1,0 +1,77 @@
+// ===============================================
+// Components / Poem.styl                       ||
+//                                              ||
+// =============================================||
+// Copyright 2015 @ Rakume<i@fake.moe>          ||
+// MIT License                                  ||
+// ===============================================
+
+@require "../variables"
+
+// Horizontal Poem
+// ==============================================
+
+.poem-horizontal
+  text-align: center
+  margin: 2em 0
+
+  p
+    margin-bottom: .2em
+
+    &:before
+      content: none
+
+  .poem-author
+    display: block
+    text-align: right
+    font-weight: 800
+
+    &:before
+      content: '——'
+
+// Vertical Poem
+// ==============================================
+
+.poem-vertical-left,
+.poem-vertical-right
+  display: block
+  white-space: pre-line
+  margin: 2em auto
+  line-height: 1.4em
+
+  -webkit-writing-mode: vertical-lr
+  writing-mode: vertical-lr
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .poem-title
+    margin: 0
+    margin-left: -.5em
+    font-weight: bold
+    font-family: font-family-serif
+
+    &:before
+      content: none
+
+    .poem-author
+      font-size: 60%
+
+  p
+    margin: 0 -.3em
+    text-align: left
+    max-height: 600px
+    letter-spacing: inherit
+    word-wrap: break-word
+    white-space: pre-line
+    line-height: 1em
+
+    &:before
+      content: none
+
+.poem-vertical-left
+  -webkit-writing-mode: vertical-lr
+  writing-mode: vertical-lr

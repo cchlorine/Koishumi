@@ -1,0 +1,3 @@
+[submodule "src/stylus/lutachu"]
+	path = src/stylus/lutachu
+	url = https://github.com/lingoys/lutachu

@@ -1,0 +1,50 @@
+doctype html
+html(lang="zh-Hant")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
+
+    block title
+      title= "Koishumi"
+
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", href="assets/style/main.css")
+
+  body
+    header#header
+      h1.header-title
+        a(href="#/home") Koishumi
+      p.header-descripition 優雅地使用 Markdown 寫作
+    main#main.container
+    footer#footer
+      p &copy 2015 Rakume Hayashi
+      p Made with <a href="https://github.com/Kunr/Koishumi" title="Koishumi" target="_blank">Koishumi</a>
+
+    script#posts-list(type="text/html").
+      <section class="content">
+        {{each posts as value}}
+          <article class="post">
+            <a class="post-link" href="{{value.url}}" title="{{ value.title }}">{{ value.title }}</a>
+            <small class="post-date">{{ value.date }}</small>
+          </article>
+        {{/each}}
+      </section>
+
+    script#article(type="text/html").
+      <header class="post-header">
+        <small class="post-datetime">{{ date }}</small>
+        <h2 class="post-title">{{ title }}</h2>
+      </header>
+      <section class="content">
+          {{ #content }}
+      </section>
+    script.
+      var github = {
+        repo: 'Kunr/Koishumi',
+        branch: 'markdown',
+        path: ''
+      }
+
+    script(src="assets/script/artTemplate.js")
+    script(src="assets/script/showdown.js")
+    script(src="assets/script/main.js")

@@ -1,0 +1,148 @@
+// ===============================================
+// Typograhpy / Typograhpy.styl                 ||
+//                                              ||
+// =============================================||
+// Copyright 2015 @ Rakume<i@fake.moe>          ||
+// MIT License                                  ||
+// ===============================================
+
+@require "../variables"
+
+body
+  font-weight: 400
+
+  color: color-normal
+  font-family: font-family-normal
+
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+.text-indent p::before
+  content: "\3000\3000"
+  display: inline
+
+p
+  margin-top: 0
+  margin-bottom: 1em
+
+  line-height: 1.86
+
+  text-align: justify
+  text-justify: ideographic
+  letter-spacing: .3px
+
+  word-break: break-all
+
+  &.text-author
+    display: block
+    text-align: right
+    font-weight: 800
+
+    &::before
+      content: '——' !important
+
+a
+  color: color-link
+
+  text-decoration-color: rgba(0, 0, 0, .4)
+
+  img
+    border: 0
+
+img
+  max-width: 100%
+
+// Symbol
+
+b
+em
+cite
+strong
+  color: color-normal
+  font-weight: 700
+
+  a
+    color: inherit
+
+em
+cite
+  font-style: normal
+
+  a
+    font-style: normal
+
+em
+  font-style: inherit
+  font-weight: inherit
+  text-decoration: inherit
+
+  -webkit-text-emphasis: filled circle
+  -moz-text-emphasis: filled circle
+  text-emphasis: filled circle
+
+  -webkit-text-emphasis-position: under
+  -moz-text-emphasis-position: under
+  text-emphasis-position: under
+
+i
+  font-style: italic
+
+img
+  margin: .2em 0
+
+sub,
+sup
+  a
+    text-decoration: none
+
+hr
+  width: 20%
+  display: block
+  border: 0 none
+  margin: 2em auto
+  border-top: 2px solid color-border-normal
+
+abbr[title]
+dfn[title]
+  cursor: help
+  border-bottom: 1px dotted
+
+dl
+  margin-bottom: .2em
+
+dt
+  padding: 0
+  font-weight: 800
+
+dd
+  margin-left: 0
+
+dt + dd
+  margin-top: .2em
+
+dd + dt
+  margin-top: .6em
+
+[draggable]
+  cursor: move
+
+mark
+  color: color-normal
+
+  background: #FFFCC4
+  border-bottom: 1px solid #ffedce
+
+kbd
+  color: #fff
+  font-size: 90%
+
+  padding: 2px 4px
+  border-radius: 3px
+
+  background-color: #333
+
+  font-family: font-family-monospace
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .25)
+
+  kbd
+    padding: 0

@@ -1,0 +1,82 @@
+// ===============================================
+// Elements / Code.styl                         ||
+//                                              ||
+// =============================================||
+// Copyright 2015 @ Rakume<i@fake.moe>          ||
+// MIT License                                  ||
+// ===============================================
+
+@require "../variables"
+
+tt
+code
+pre
+  font-family: font-family-monospace
+
+tt
+code
+  font-size: .8em
+
+  margin: 0 .3em
+  padding: .1em .5em
+
+  border-radius: 3px
+  word-break: break-all
+
+  background: color-background-code
+  border: 1px solid color-border-normal
+
+pre
+  display block
+  overflow auto
+
+  padding: .8em 1.3em
+  margin 1.6em -1.3em
+
+  font-size .9em
+  line-height 1.5
+
+  color: color-dark-grey
+  background: color-background-code
+  border-left: 2px solid color-border-normal
+
+  transition: .3s ease border
+
+  &:hover
+    border-left-color: color-border-focus
+
+  code
+  tt
+    margin: 0
+    padding: 0
+    border: none
+
+    font-size: 1rem
+    background: none
+
+blockquote
+  padding: 0 1.3em
+  margin: 1em -1.3em 0
+
+  line-height: 1.62
+
+  color: color-dark-grey
+  border-left: 2px solid color-border-normal
+
+  a
+    color: color-link-grey
+
+  p
+    margin-bottom: .5em
+
+    &:last-child
+      margin-bottom: 0
+
+  b
+  em
+  cite
+  strong
+    color: #777
+
+  & + p
+    margin-top: 1em

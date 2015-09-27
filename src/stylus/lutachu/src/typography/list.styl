@@ -1,0 +1,49 @@
+// ===============================================
+// Typograhpy / List.styl                       ||
+//                                              ||
+// =============================================||
+// Copyright 2015 @ Rakume<i@fake.moe>          ||
+// MIT License                                  ||
+// ===============================================
+
+ul
+ol
+  margin: 0 0 2em .4em
+  padding-left: 2em
+
+  line-height: 1.62
+
+ul
+  list-style-type: square
+
+ol
+  list-style-type: decimal
+
+li
+  margin-bottom: .2em
+
+  ul
+  ol
+    margin-top: 0
+    margin-bottom: 0
+    margin-left: 14px
+
+ul li
+  ul li
+    list-style-type: disc
+
+    ul li
+      list-style-type: circle
+
+ol li
+  ol li
+    list-style-type: upper-roman
+
+    ol li
+      list-style-type: lower-roman
+
+  p
+    margin: .4em 0 .6em
+
+    &::before
+      content: none
