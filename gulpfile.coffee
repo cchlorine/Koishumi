@@ -2,7 +2,6 @@
 del   = require 'del'
 gulp  = require 'gulp'
 
-cache  = require 'gulp-cache'
 concat = require 'gulp-concat'
 rename = require 'gulp-rename'
 
@@ -56,8 +55,7 @@ gulp.task 'assets', ->
 # Task Clean
 # Clean old files
 gulp.task 'clean', (cb)->
-    del [distPath], cb
-	   cache.clearAll()
+    del [distPath]
 
 # Default
 gulp.task 'default', ['clean'], ->
