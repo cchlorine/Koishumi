@@ -1,0 +1,1 @@
+When you see this article, it means Koishumi is working!
