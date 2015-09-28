@@ -9,10 +9,10 @@ Koishumi = ((W)->
 
     month + ' ' + day + ', ' + value[0]
 
-  getList = ()->
+  getList = ->
     script = document.createElement 'script'
     script.src = 'https://api.github.com/repos/' + github.repo + (if github.path then github.path else '') + '/contents/?' + (if github.branch then 'ref=' + github.branch + '&' else '') + 'callback=Koishumi.showList'
-    script.onload = ()->
+    script.onload = ->
       this.remove()
 
     document.body.appendChild script
@@ -44,7 +44,7 @@ Koishumi = ((W)->
     request = new XMLHttpRequest()
     request.open 'GET', 'https://raw.githubusercontent.com/'  + github.repo + '/' + (if github.branch then github.branch + '/' else '')+ (if github.path then github.path else '') + encodeURIComponent path.join('-') + '.md'
 
-    request.onload = ()->
+    request.onload = ->
       if request.status >= 200 and request.status < 400
         data = request.responseText
 
@@ -56,7 +56,7 @@ Koishumi = ((W)->
 
     request.send()
 
-  matching = ()->
+  matching = ->
     return location.hash = '#/home' if !location.hash.substr(2)
 
     hash = decodeURIComponent(location.hash.substr(2))
