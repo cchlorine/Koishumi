@@ -54,17 +54,17 @@ gulp.task 'assets', ->
 
 # Task Clean
 # Clean old files
-gulp.task 'clean', (cb)->
-    del [distPath]
+gulp.task 'clean', ->
+    del distPath + '**/*.*'
 
 # Default
 gulp.task 'default', ['clean'], ->
-    gulp.start 'jade', 'stylus', 'coffee', 'assets'
+  gulp.start 'jade', 'stylus', 'coffee', 'assets'
 
 # Task Watch
 gulp.task 'watch', ->
     gulp.watch jadePath   + '/**/*.jade', ['jade']
-    gulp.watch stylusPath   + '/**/*.styl', ['stylus']
+    gulp.watch stylusPath + '/**/*.styl', ['stylus']
     gulp.watch coffeePath + '/**/*.coffee', ['coffee']
     gulp.watch assetsPath + '/**/*', ['assets']
     livereload.listen()
