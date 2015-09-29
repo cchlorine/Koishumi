@@ -1,7 +1,7 @@
-Koishumi = ((W)->
+Koishumi = ((W, D) ->
   hash = ''
 
-  time = (value)->
+  time = (value) ->
     month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
     month = month[+value[1].replace(/^0/, '') - 1]
@@ -9,8 +9,8 @@ Koishumi = ((W)->
 
     month + ' ' + day + ', ' + value[0]
 
-  loadScript = (url)->
-    script = document.createElement 'script'
+  loadScript = (url) ->
+    script = D.createElement 'script'
 
     script.src = url
     script.async = true
@@ -18,12 +18,18 @@ Koishumi = ((W)->
     script.onload = ->
       this.remove()
 
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild script
+    (D.getElementsByTagName('head')[0] || D.getElementsByTagName('body')[0]).appendChild script
+
+  getConfig = (name, context, extra) ->
+    return '' if context and !config[context]
+
+    value = (config[context] || config)[name]
+    return if value then value + (if extra then extra else '') else ''
 
   getList = ->
-    loadScript 'https://api.github.com/repos/' + config.github.repo + (if config.github.path then config.github.path else '') + '/contents/?' + (if config.github.branch then 'ref=' + config.github.branch + '&' else '') + 'callback=Koishumi.showList'
+    loadScript 'https://api.github.com/repos/' + getConfig('repo', 'github') + getConfig('path', 'github') + '/contents/?' + getConfig('branch', 'github', '&') + 'callback=Koishumi.showList'
 
-  showList = (data)->
+  showList = (data) ->
     data = data.data
 
     i = 0
@@ -39,25 +45,28 @@ Koishumi = ((W)->
         date: time(path)
       }
 
-    document.getElementById('main').innerHTML = template 'posts-list', {posts: posts}
+    D.title = 'Home'
+    D.getElementById('main').innerHTML = template 'posts-list', {posts: posts}
 
-  getArticle = (path)->
+  getArticle = (path) ->
     path = path.replace(/\/$/, '').split '/'
 
     request = new XMLHttpRequest()
-    request.open 'GET', 'https://raw.githubusercontent.com/'  + config.github.repo + '/' + (if config.github.branch then config.github.branch + '/' else '')+ (if config.github.path then config.github.path else '') + encodeURIComponent path.join('-') + '.md'
+    request.open 'GET', 'https://raw.githubusercontent.com/'  + getConfig('repo', 'github') + '/' + getConfig('branch', 'github', '/') + getConfig('path', 'github') + encodeURIComponent path.join('-') + '.md'
 
     request.onload = ->
       if request.status >= 200 and request.status < 400
         data = request.responseText
+        name = path.pop()
 
-        document.getElementById('main').innerHTML = template 'article', {
-            title: path.pop(),
+        D.title = name
+        D.getElementById('main').innerHTML = template 'article', {
+            title: name,
             date: time(path),
 
             url: location.href,
             comment: {
-              type: if config.comment.type then config.comment.type else ''
+              type: getConfig 'type', 'comment'
             },
 
             content: (new showdown.Converter).makeHtml data
@@ -74,14 +83,14 @@ Koishumi = ((W)->
                 }
               else
                 setTimeout ->
-                  loadScript '//' + config.comment.shortname + '.disqus.com/embed.js'
+                  loadScript '//' + getConfig('shortname', 'comment') + '.disqus.com/embed.js'
             , 1000
 
           when 'duoshuo'
             setTimeout ->
               if W.DUOSHUO then DUOSHUO.EmbedThread '.ds-thread'
               else
-                W.duoshuoQuery = {short_name: config.comment.shortname}
+                W.duoshuoQuery = {short_name: getConfig('shortname', 'comment')}
                 loadScript '//static.duoshuo.com/embed.js'
             , 1000
 
@@ -93,7 +102,7 @@ Koishumi = ((W)->
     hash = decodeURIComponent(location.hash.substr(2))
     if hash == 'home' then getList() else getArticle(hash)
 
-  return console.log 'Cannot find any available repo. Complete config please.' if !config.github or !config.github.repo
+  return console.log 'Cannot find any available repo. Complete config please.' if !getConfig('repo', 'github')
 
   W.onhashchange = matching
   matching()
@@ -101,4 +110,4 @@ Koishumi = ((W)->
   {
     showList: showList
   }
-)(this)
+)(this, document)
