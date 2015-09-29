@@ -1,7 +1,7 @@
 var Koishumi;
 
-Koishumi = (function(W) {
-  var getArticle, getList, hash, matching, showList, time;
+Koishumi = (function(W, D) {
+  var getArticle, getConfig, getList, hash, loadScript, matching, showList, time;
   hash = '';
   time = function(value) {
     var day, month;
@@ -10,49 +10,98 @@ Koishumi = (function(W) {
     day = value[2].replace(/^0/, '');
     return month + ' ' + day + ', ' + value[0];
   };
-  getList = function() {
+  loadScript = function(url) {
     var script;
-    script = document.createElement('script');
-    script.src = 'https://api.github.com/repos/' + github.repo + (github.path ? github.path : '') + '/contents/?' + (github.branch ? 'ref=' + github.branch + '&' : '') + 'callback=Koishumi.showList';
+    script = D.createElement('script');
+    script.src = url;
+    script.async = true;
     script.onload = function() {
       return this.remove();
     };
-    return document.body.appendChild(script);
+    return (D.getElementsByTagName('head')[0] || D.getElementsByTagName('body')[0]).appendChild(script);
+  };
+  getConfig = function(name, context, after, before) {
+    var value;
+    if (context && !config[context]) {
+      return '';
+    }
+    value = (config[context] || config)[name];
+    if (value) {
+      return (before ? before : '') + value + (after ? after : '');
+    } else {
+      return '';
+    }
+  };
+  getList = function() {
+    return loadScript('https://api.github.com/repos/' + getConfig('repo', 'github') + getConfig('path', 'github') + '/contents/?' + getConfig('branch', 'github', '&', 'ref=') + 'callback=Koishumi.showList');
   };
   showList = function(data) {
-    var article, date, i, name, path, posts, url;
+    var article, i, path, posts;
     data = data.data;
     i = 0;
     posts = [];
     while ((article = data[i++])) {
       path = article.name.replace(/\.md$/, '').split('-');
-      date = time(path);
-      name = path.length === 1 ? path : path.pop();
-      url = path.join('/') + '/' + encodeURIComponent(name);
       posts.push({
-        url: '#/' + url,
-        title: name,
-        date: date
+        url: '#/' + encodeURIComponent(path.join('/')),
+        title: path.pop(),
+        date: time(path)
       });
     }
-    return document.getElementById('main').innerHTML = template('posts-list', {
+    D.title = 'Home';
+    return D.getElementById('main').innerHTML = template('posts-list', {
       posts: posts
     });
   };
   getArticle = function(path) {
     var request;
-    path = path.split('/');
+    path = path.replace(/\/$/, '').split('/');
     request = new XMLHttpRequest();
-    request.open('GET', 'https://raw.githubusercontent.com/' + github.repo + '/' + (github.branch ? github.branch + '/' : '') + (github.path ? github.path : '') + encodeURIComponent(path.join('-') + '.md'));
+    request.open('GET', 'https://raw.githubusercontent.com/' + getConfig('repo', 'github') + '/' + getConfig('branch', 'github', '/') + getConfig('path', 'github') + encodeURIComponent(path.join('-') + '.md'));
     request.onload = function() {
-      var data;
+      var data, name;
       if (request.status >= 200 && request.status < 400) {
         data = request.responseText;
-        return document.getElementById('main').innerHTML = template('article', {
-          title: path.pop(),
+        name = path.pop();
+        D.title = name;
+        D.getElementById('main').innerHTML = template('article', {
+          title: name,
           date: time(path),
+          url: location.href,
+          comment: {
+            type: getConfig('type', 'comment')
+          },
           content: (new showdown.Converter).makeHtml(data)
         });
+        switch (config.comment.type) {
+          case 'disqus':
+            return setTimeout(function() {
+              if (W.DISQUS) {
+                return DISQUS.reset({
+                  reload: true,
+                  config: function() {
+                    this.page.identifier = title;
+                    return this.page.url = location.href;
+                  }
+                });
+              } else {
+                return setTimeout(function() {
+                  return loadScript('//' + getConfig('shortname', 'comment') + '.disqus.com/embed.js');
+                });
+              }
+            }, 1000);
+          case 'duoshuo':
+            return setTimeout(function() {
+              if (W.DUOSHUO) {
+                return DUOSHUO.EmbedThread('.ds-thread');
+              } else {
+                W.duoshuoQuery = {
+                  short_name: getConfig('shortname', 'comment')
+                };
+                return loadScript('//static.duoshuo.com/embed.js');
+              }
+            }, 1000);
+        }
       }
     };
     return request.send();
@@ -68,7 +117,7 @@ Koishumi = (function(W) {
       return getArticle(hash);
     }
   };
-  if (!github || !github.repo) {
+  if (!getConfig('repo', 'github')) {
     return console.log('Cannot find any available repo. Complete config please.');
   }
   W.onhashchange = matching;
@@ -76,4 +125,4 @@ Koishumi = (function(W) {
   return {
     showList: showList
   };
-})(this);
+})(this, document);
