@@ -20,14 +20,14 @@ Koishumi = ((W, D) ->
 
     (D.getElementsByTagName('head')[0] || D.getElementsByTagName('body')[0]).appendChild script
 
-  getConfig = (name, context, extra) ->
+  getConfig = (name, context, after, before) ->
     return '' if context and !config[context]
 
     value = (config[context] || config)[name]
-    return if value then value + (if extra then extra else '') else ''
+    return if value then (if before then before else '') + value + (if after then after else '') else ''
 
   getList = ->
-    loadScript 'https://api.github.com/repos/' + getConfig('repo', 'github') + getConfig('path', 'github') + '/contents/?' + getConfig('branch', 'github', '&') + 'callback=Koishumi.showList'
+    loadScript 'https://api.github.com/repos/' + getConfig('repo', 'github') + getConfig('path', 'github') + '/contents/?' + getConfig('branch', 'github', '&', 'ref=') + 'callback=Koishumi.showList'
 
   showList = (data) ->
     data = data.data
