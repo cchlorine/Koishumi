@@ -15,13 +15,15 @@ html(lang="zh-Hant")
       h1.header-title
         a(href="#/home") Koishumi
       p.header-descripition 優雅地使用 Markdown 寫作
+ 
     main#main.container
+
     footer#footer
       p &copy 2015 Rakume Hayashi
       p Made with <a href="https://github.com/Kunr/Koishumi" title="Koishumi" target="_blank">Koishumi</a>
 
     script#posts-list(type="text/html").
-      <section class="content">
+      <section id="home">
         {{each posts as value}}
           <article class="post">
             <a class="post-link" href="{{value.url}}" title="{{ value.title }}">{{ value.title }}</a>
@@ -31,18 +33,39 @@ html(lang="zh-Hant")
       </section>
 
     script#article(type="text/html").
-      <header class="post-header">
-        <small class="post-datetime">{{ date }}</small>
-        <h2 class="post-title">{{ title }}</h2>
-      </header>
-      <section class="content">
+      <article id="post">
+        <header class="post-header">
+          <small class="post-datetime">{{ date }}</small>
+          <h2 class="post-title">{{ title }}</h2>
+        </header>
+
+        <section class="post-content">
           {{ #content }}
-      </section>
+        </section>
+      </article>
+
+      {{if comment.type}}
+        <section id="comment">
+          {{if comment.type == "disqus"}}
+            <div id="disqus_thread"></div>
+          {{else if comment.type == "duoshuo"}}
+            <div class="ds-thread" data-title="{{ title }}" data-url="{{ url }}" data-thread-key="{{ title }}"></div>
+          {{/if}}
+        <section>
+      {{/if}}
+
     script.
-      var github = {
-        repo: 'Kunr/Koishumi',
-        branch: 'markdown',
-        path: ''
+      var config = {
+        github: {
+          repo: 'Kunr/Koishumi',
+          branch: 'markdown',
+          path: ''
+        },
+
+        comment: {
+          type: 'koishumi',
+          shortname: 'rakunr'
+        }
       }
 
     script(src="assets/script/artTemplate.js")
