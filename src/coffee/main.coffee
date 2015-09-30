@@ -1,6 +1,15 @@
 Koishumi = ((W, D) ->
   hash = ''
 
+  converter = new showdown.Converter {
+    omitExtraWLInCodeBlocks: true,
+    parseImgDimensions: true,
+    simplifiedAutoLink: true,
+    literalMidWordUnderscores: true,
+    tables: true,
+    tasklists: true
+  }
+
   time = (value) ->
     month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
@@ -70,7 +79,7 @@ Koishumi = ((W, D) ->
               type: getConfig 'type', 'comment'
             },
 
-            content: (new showdown.Converter).makeHtml data
+            content: converter.makeHtml data
           }
 
         switch config.comment.type
