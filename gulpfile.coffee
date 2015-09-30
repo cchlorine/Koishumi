@@ -42,6 +42,7 @@ gulp.task 'stylus', ->
 gulp.task 'coffee', ->
     gulp.src coffeePath + '/**/*.coffee'
         .pipe coffee { bare: true }
+        .pipe uglify()
         .pipe gulp.dest distPath + '/assets/script/'
         .pipe livereload()
 
