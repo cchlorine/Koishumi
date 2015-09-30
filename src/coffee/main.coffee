@@ -45,8 +45,9 @@ Koishumi = ((W, D) ->
         date: time(path)
       }
 
+
     D.title = 'Home'
-    D.getElementById('main').innerHTML = template 'posts-list', {posts: posts}
+    D.getElementById('main').innerHTML = template 'posts-list', {posts: posts.reverse()}
 
   getArticle = (path) ->
     path = path.replace(/\/$/, '').split '/'
