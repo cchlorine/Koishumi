@@ -48,7 +48,7 @@ Koishumi = ((W, D) ->
       path = article.name.replace(/\.md$/, '').split '-'
 
       posts.push {
-        url: '#/' + encodeURIComponent(path.join '/'),
+        url: '#!/' + encodeURIComponent(path.join '/'),
 
         title: path.pop(),
         date: time(path)
@@ -107,9 +107,9 @@ Koishumi = ((W, D) ->
     request.send()
 
   matching = ->
-    return location.hash = '#/home' if !location.hash.substr(2)
+    return location.hash = '#!/home' if !location.hash.substr(3)
 
-    hash = decodeURIComponent(location.hash.substr(2))
+    hash = decodeURIComponent(location.hash.substr(3))
     if hash == 'home' then getList() else getArticle(hash)
 
   return console.log 'Cannot find any available repo. Complete config please.' if !getConfig('repo', 'github')
