@@ -84,20 +84,15 @@ Koishumi = ((W, D) ->
         switch config.comment.type
           when 'disqus'
             setTimeout ->
-              if W.DISQUS
-			    W.disqus_shortname = document.title
-			    W.disqus_url = location.href
+              W.disqus_identifier = document.title
+              W.disqus_url = location.href
 
-				DISQUS.reset {
+              if W.DISQUS then DISQUS.reset {
                   reload: true
 				}
               else
-                W.disqus_shortname = getConfig('shortname', 'comment')
-                W.disqus_identifier = document.title
-                W.disqus_url = location.href
-
                 setTimeout ->
-                  loadScript '//' + W.disqus_shortname + '.disqus.com/embed.js'
+                  loadScript '//' + getConfig('shortname', 'comment') + '.disqus.com/embed.js'
             , 1000
 
           when 'duoshuo'
