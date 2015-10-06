@@ -54,7 +54,6 @@ Koishumi = ((W, D) ->
         date: time(path)
       }
 
-
     D.title = 'Home'
     D.getElementById('main').innerHTML = template 'posts-list', {posts: posts.reverse()}
 
@@ -85,13 +84,13 @@ Koishumi = ((W, D) ->
         switch config.comment.type
           when 'disqus'
             setTimeout ->
-              if W.DISQUS then DISQUS.reset {
-                  reload: true,
-                  config: ->
-                    W.page.identifier = document.title
-                    W.page.title = document.title
-                    W.page.url = location.href
-                }
+              if W.DISQUS
+			    W.disqus_shortname = document.title
+			    W.disqus_url = location.href
+
+				DISQUS.reset {
+                  reload: true
+				}
               else
                 W.disqus_shortname = getConfig('shortname', 'comment')
                 W.disqus_identifier = document.title
