@@ -17,7 +17,7 @@ Koishumi = ((window, document)->
 
     script.onload = ->
       this.remove()
-      callback()
+      callback() if callback?
 
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild script
 
