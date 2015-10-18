@@ -1,122 +1,141 @@
-Koishumi = ((W, D) ->
+Koishumi = ((window, document)->
   hash = ''
 
-  converter = new showdown.Converter {
-    omitExtraWLInCodeBlocks: true,
-    parseImgDimensions: true,
-    simplifiedAutoLink: true,
-    literalMidWordUnderscores: true,
-    tables: true,
+  converter = new showdown.Converter
+    omitExtraWLInCodeBlocks: true
+    parseImgDimensions: true
+    simplifiedAutoLink: true
+    literalMidWordUnderscores: true
+    tables: true
     tasklists: true
-  }
 
-  time = (value) ->
-    month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-
-    month = month[+value[1].replace(/^0/, '') - 1]
-    day = value[2].replace(/^0/, '')
-
-    month + ' ' + day + ', ' + value[0]
-
-  loadScript = (url) ->
-    script = D.createElement 'script'
+  loadScript = (url, callback)->
+    script = document.createElement 'script'
 
     script.src = url
     script.async = true
 
     script.onload = ->
       this.remove()
+      callback()
 
-    (D.getElementsByTagName('head')[0] || D.getElementsByTagName('body')[0]).appendChild script
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild script
 
   getConfig = (name, context, after, before) ->
     return '' if context and !config[context]
 
     value = (config[context] || config)[name]
-    return if value then (if before then before else '') + value + (if after then after else '') else ''
+    return if value then (if before then before else '') + value + (if after then after else '') else ''   
 
-  getList = ->
-    loadScript 'https://api.github.com/repos/' + getConfig('repo', 'github') + getConfig('path', 'github') + '/contents/?' + getConfig('branch', 'github', '&', 'ref=') + 'callback=Koishumi.showList'
+  path =
+    month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-  showList = (data) ->
-    data = data.data
+    time: (array)->
+      year = array.shift()
 
-    i = 0
-    posts = []
+      array[0] = this.month[array[0] - 1]
+      array[1] = +array[1]
 
-    while(article = data[i++])
-      path = article.name.replace(/\.md$/, '').split '-'
+      array.join(' ') + ', ' + year
 
-      posts.push {
-        url: '#!/' + encodeURIComponent(path.join '/'),
+    decode: (path)->
+      path = path.split '-', 4
+      title = path.pop()
 
-        title: path.pop(),
-        date: time(path)
-      }
+      title: title
+      date: this.time path
 
-    D.title = 'Home'
-    D.getElementById('main').innerHTML = template 'posts-list', {posts: posts.reverse()}
+      url: '#!/' + path.join('-') + '-' + encodeURIComponent title
 
-  getArticle = (path) ->
-    path = path.replace(/\/$/, '').split '/'
+  controller =
+    home: ->
+      loadScript 'https://api.github.com/repos/' + getConfig('repo', 'github') + getConfig('path', 'github') + '/contents/?' + getConfig('branch', 'github', '&', 'ref=') + 'callback=Koishumi.updateList', ->
+        document.title = 'Home'
 
-    request = new XMLHttpRequest()
-    request.open 'GET', 'https://raw.githubusercontent.com/'  + getConfig('repo', 'github') + '/' + getConfig('branch', 'github', '/') + getConfig('path', 'github') + encodeURIComponent path.join('-') + '.md'
+    article: (hash)->
+      info = path.decode hash
 
-    request.onload = ->
-      if request.status >= 200 and request.status < 400
-        data = request.responseText
-        name = path.pop()
+      request = new XMLHttpRequest()
+      request.open 'GET', 'https://raw.githubusercontent.com/'  + getConfig('repo', 'github') + '/' + getConfig('branch', 'github', '/') + getConfig('path', 'github') + hash + '.md'
 
-        D.title = name
-        D.getElementById('main').innerHTML = template 'article', {
-            title: name,
-            date: time(path),
+      request.onload = ->
+        if request.status >= 200 and request.status < 400
+          data = request.responseText
 
-            url: location.href,
-            comment: {
-              type: getConfig 'type', 'comment'
-            },
+          document.title = info.title
+          document.getElementById('main').innerHTML = template 'article',
+              url: location.href
 
-            content: converter.makeHtml data
-          }
+              title: info.title
+              date: info.date
 
-        switch config.comment.type
-          when 'disqus'
-            setTimeout ->
-              W.disqus_identifier = document.title
-              W.disqus_url = location.href
+              content: converter.makeHtml data
+              comment:
+                type: getConfig 'type', 'comment'
 
-              if W.DISQUS then DISQUS.reset {
-                  reload: true
-				}
-              else
-                setTimeout ->
-                  loadScript '//' + getConfig('shortname', 'comment') + '.disqus.com/embed.js'
-            , 1000
+          controller.comment()
 
-          when 'duoshuo'
-            setTimeout ->
-              if W.DUOSHUO then DUOSHUO.EmbedThread '.ds-thread'
-              else
-                W.duoshuoQuery = {short_name: getConfig('shortname', 'comment')}
-                loadScript '//static.duoshuo.com/embed.js'
-            , 1000
+      request.send()
+    
+    comment: ->
+      switch getConfig 'type', 'comment'
+        when 'disqus'
+          setTimeout ->
+            window.disqus_identifier = document.title
+            window.disqus_url = location.href
 
-    request.send()
+            if window.DISQUS then DISQUS.reset
+              reload: true
+            else loadScript '//' + getConfig('shortname', 'comment') + '.disqus.com/embed.js'
+          , 1000
 
-  matching = ->
-    return location.hash = '#!/home' if !location.hash.substr(3)
+        when 'duoshuo'
+          setTimeout ->
+            if window.DUOSHUO
+              DUOSHUO.EmbedThread '.ds-thread'
+            else
+              window.duoshuoQuery = short_name: getConfig('shortname', 'comment')
+              loadScript '//static.duoshuo.com/embed.js'
+          , 1000
 
-    hash = decodeURIComponent(location.hash.substr(3))
-    if hash == 'home' then getList() else getArticle(hash)
+  list =
+    data: if data = JSON.parse localStorage.getItem 'koishumi' then data else localStorage.setItem('koishumi', '[]') || []
 
-  return console.log 'Cannot find any available repo. Complete config please.' if !getConfig('repo', 'github')
+    cache: ->
+      localStorage.setItem 'koishumi', JSON.stringify this.data
 
-  W.onhashchange = matching
-  matching()
+    update: (data)->
+      list.show() if data.meta['X-RateLimit-Limit'] == 0
 
-  {
-    showList: showList
-  }
+      length = i = data.data.length
+      list.data = while article = data.data[--i]
+        continue if '.md' != article.name.substr -3
+
+        info = path.decode article.name.replace /\.md$/, ''
+
+        id: length - i
+        url: info.url
+
+        title: info.title
+        date: info.date
+
+      list.cache()
+      list.show()
+
+    show: ->
+      document.getElementById('main').innerHTML = template 'article-list', {posts: this.data}
+
+  routing = ->
+    hash = decodeURIComponent location.hash
+
+    return location.hash = '#!/home' if hash.substr(0, 3) != '#!/' or !hash.substr 3
+
+    if 'home' == hash.substr 3 then controller.home() else controller.article hash.substr 3
+
+  return console.log 'Cannot find any available repo. Complete config please.' if !getConfig 'repo', 'github'
+
+  window.onhashchange = routing
+  routing()
+
+  updateList: list.update
 )(this, document)
