@@ -74,6 +74,12 @@ Koishumi = ((window, document)->
 
           controller.comment()
 
+        else
+          route.go()
+
+      request.onerror = ->
+        route.go()
+
       request.send()
     
     comment: ->
@@ -123,17 +129,20 @@ Koishumi = ((window, document)->
     show: ->
       document.getElementById('main').innerHTML = template 'article-list', {posts: this.data}
 
-  routing = ->
-    hash = decodeURIComponent location.hash
+  route =
+    go: (hash)->
+      location.hash = '#!/' + if hash then hash else 'home'
 
-    return location.hash = '#!/home' if hash.substr(0, 3) != '#!/' or !hash.substr 3
+    maping: ->
+      hash = decodeURIComponent location.hash
+      return route.go() if hash.substr(0, 3) != '#!/' or !hash.substr 3
 
-    if 'home' == hash.substr 3 then controller.home() else controller.article hash.substr 3
+      if 'home' == hash.substr 3 then controller.home() else controller.article hash.substr 3
 
   return console.log 'Cannot find any available repo. Complete config please.' if !getConfig 'repo', 'github'
 
-  window.onhashchange = routing
-  routing()
+  window.onhashchange = route.maping
+  route.maping()
 
   updateList: list.update
 )(this, document)
