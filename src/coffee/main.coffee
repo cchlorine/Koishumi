@@ -42,10 +42,9 @@ Koishumi = ((window, document)->
       path = path.split '-', 4
       title = path.pop()
 
+      url: '#!/' + path.join('-') + '-' + encodeURIComponent title
       title: title
       date: this.time path
-
-      url: '#!/' + path.join('-') + '-' + encodeURIComponent title
 
   controller =
     home: ->
@@ -115,7 +114,6 @@ Koishumi = ((window, document)->
 
         id: length - i
         url: info.url
-
         title: info.title
         date: info.date
 
