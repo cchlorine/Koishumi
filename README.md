@@ -19,13 +19,20 @@ To use it, just change the setting in `index.html`.
 Like this,
 ```
 var config = {
-  ...
+  github: {
+    repo: 'Kunr/Koishumi',
+    branch: 'markdown',
+    path: ''
+  },
+
   comment: {
     type: 'disqus',
     shortname: 'koishumi'
   }
 }
 ```
+You must change `Kunr` to your username! if not is 404!
+
 Change `koishumi` to your site's shortname!
 
 ## Bugs and feature reporting
