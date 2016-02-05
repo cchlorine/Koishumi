@@ -11,7 +11,7 @@ coffee = require 'gulp-coffee'
 
 uglify       = require 'gulp-uglify'
 autoprefixer = require 'gulp-autoprefixer'
-minifycss    = require 'gulp-minify-css'
+cssnano      = require 'gulp-cssnano'
 
 livereload = require 'gulp-livereload'
 
@@ -25,7 +25,7 @@ distPath    = './dist'
 # Task Jade
 gulp.task 'jade', ->
     gulp.src jadePath + '/**/*.jade'
-	   .pipe jade { pretty: false }
+	   .pipe jade { pretty: true }
 	   .pipe gulp.dest distPath
 	   .pipe livereload()
 
@@ -34,7 +34,7 @@ gulp.task 'stylus', ->
     gulp.src stylusPath + '/main.styl'
         .pipe stylus()
         .pipe autoprefixer 'last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'
-        .pipe minifycss()
+        .pipe cssnano()
         .pipe gulp.dest distPath + '/assets/style/'
         .pipe livereload()
 
