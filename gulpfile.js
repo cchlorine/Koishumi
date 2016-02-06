@@ -26,7 +26,7 @@ gulp.task('stylus', function() {
     .pipe(stylus())
     .pipe(autoprefixer('last 4 versions'))
     .pipe(cssnano())
-    .pipe(gulp.dest('src/assets/style'))
+    .pipe(gulp.dest('dist/assets/style'))
     .pipe(livereload())
 })
 
@@ -34,14 +34,14 @@ gulp.task('coffee', function() {
   return gulp.src('src/coffee/**/*.coffee')
     .pipe(coffee({ bare: true }))
     .pipe(uglify())
-    .pipe(gulp.dest('src/assets/script'))
+    .pipe(gulp.dest('dist/assets/script'))
     .pipe(livereload())
 })
 
 gulp.task('script', function() {
   return gulp.src('src/assets/**/*.js')
     .pipe(uglify())
-    .pipe(gulp.dest('src/assets'))
+    .pipe(gulp.dest('dist/assets'))
     .pipe(livereload())
 })
 
