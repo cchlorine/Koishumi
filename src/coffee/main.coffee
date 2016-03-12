@@ -25,7 +25,7 @@ Koishumi = ((window, document)->
     return '' if context and !config[context]
 
     value = (config[context] || config)[name]
-    return if value then (if before then before else '') + value + (if after then after else '') else ''   
+    return if value then (if before then before else '') + value + (if after then after else '') else ''
 
   path =
     month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -81,7 +81,7 @@ Koishumi = ((window, document)->
         route.go()
 
       request.send()
-    
+
     comment: ->
       switch getConfig 'type', 'comment'
         when 'disqus'

@@ -10,25 +10,30 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/Kunr/Koishumi.git"
+    "url": "git+https://github.com/Kunr/Koishumi.git"
   },
   "bugs": {
     "url": "https://github.com/Kunr/Koishumi/issues"
   },
   "license": "Apache-2.0",
   "version": "0.1.0",
+  "scripts": {
+    "assets": "cp -a src/assets dist",
+    "build": "npm run clean && npm run folder && npm run build-jade && npm run build-coffee && npm run uglify && npm run build-stylus && npm run assets",
+    "build-coffee": "coffee --output dist/assets/script --bare --no-header --compile ./src/coffee/main.coffee",
+    "build-jade": "jade ./src/jade/index.jade --out dist",
+    "build-stylus": "stylus --compress ./src/stylus/main.styl --out dist/assets/style/main.css",
+    "clean": "rm -rf dist",
+    "folder": "mkdir dist dist/assets dist/assets/script dist/assets/style",
+    "uglify": "uglifyjs --compress --mangle --output dist/assets/script/main.js -- dist/assets/script/main.js",
+    "pre-push": "npm run build",
+    "start": "coffee --output dist/assets/script --watch --bare --no-header --compile ./src/coffee/main.coffee"
+  },
   "devDependencies": {
     "coffee-script": "^1.10.0",
-    "del": "^1.1.1",
-    "gulp": "^3.8.10",
-    "gulp-autoprefixer": "^2.1.0",
-    "gulp-coffee": "^2.3.1",
-    "gulp-concat": "^2.4.3",
-    "gulp-cssnano": "^2.1.0",
-    "gulp-jade": "^0.11.0",
-    "gulp-livereload": "^3.6.0",
-    "gulp-rename": "^1.2.0",
-    "gulp-stylus": "^2.0.1",
-    "gulp-uglify": "^1.1.0"
+    "jade": "^1.11.0",
+    "lutachu": "^2.0.0",
+    "stylus": "^0.54.2",
+    "uglify-js": "^2.6.2"
   }
 }

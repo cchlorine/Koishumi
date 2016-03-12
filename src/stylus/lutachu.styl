@@ -1,24 +1,28 @@
 // Main
-@import "lutachu/src/normalize"
-@import "lutachu/src/typography/typography"
+@require "../../node_modules/lutachu/src/normalize"
+@require "../../node_modules/lutachu/src/typography/typography"
 
 // Typography
-@import "lutachu/src/typography/figure"
-@import "lutachu/src/typography/list"
-@import "lutachu/src/typography/quote"
-@import "lutachu/src/typography/title"
-@import "lutachu/src/typography/zh/counter"
+@require "../../node_modules/lutachu/src/typography/article"
+@require "../../node_modules/lutachu/src/typography/figure"
+@require "../../node_modules/lutachu/src/typography/list"
+@require "../../node_modules/lutachu/src/typography/quote"
+@require "../../node_modules/lutachu/src/typography/title"
 
 // Elements
-@import "lutachu/src/elements/button"
-@import "lutachu/src/elements/code"
-@import "lutachu/src/elements/form"
-@import "lutachu/src/elements/table"
+@require "../../node_modules/lutachu/src/elements/blockquote"
+@require "../../node_modules/lutachu/src/elements/button"
+@require "../../node_modules/lutachu/src/elements/code"
+@require "../../node_modules/lutachu/src/elements/form"
+@require "../../node_modules/lutachu/src/elements/table"
 
 // Other
-@import "lutachu/src/utilities"
-@import "lutachu/src/print"
+@require "../../node_modules/lutachu/src/utilities"
+@require "../../node_modules/lutachu/src/print"
 
+blockquote
 pre
-  margin: 0 calc(-2em - 4px) 1em calc(-2em - 5px)
-  padding: .8em calc(2em + 2px)
+  padding-left: 2.5rem
+  padding-right: 2.5rem
+  margin-left: -2.5rem
+  margin-right: -2.5rem
